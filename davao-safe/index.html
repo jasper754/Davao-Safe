@@ -1,615 +1,856 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DavaoSafe</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Davao Safe</title>
+
+  <link rel="stylesheet"
+        href="css/style.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
-  <!-- SPLASH SCREEN -->
-  <div id="page-splash" class="page active">
-    <div class="splash-bg"></div>
+<!-- SPLASH SCREEN -->
+
+<div id="page-splash"
+     class="page active">
+
+    <div class="wave-top"></div>
+
     <div class="splash-content">
-      <div class="splash-logo">
-        <div class="logo-icon">🛡️</div>
-        <h1 class="logo-title">Davao<br/>Safe</h1>
-      </div>
-      <div class="splash-wave"></div>
+
+        <h1 class="logo-title">
+            Davao<br>Safe
+        </h1>
+
     </div>
+
     <div class="splash-footer">
-      <div class="social-icons">
-        <span>🔵</span><span>🐦</span><span>📷</span>
-      </div>
-      <button class="btn-primary" onclick="showPage('page-login')">Get Started</button>
-    </div>
-  </div>
 
-  <!-- LOGIN PAGE -->
-  <div id="page-login" class="page">
-    <div class="teal-header-bg"></div>
+        <button id="getStartedBtn"
+                class="start-btn">
+
+            Get Started
+
+        </button>
+
+        <div class="life-text">
+            LIFE IS HERE
+        </div>
+
+    </div>
+
+    <div class="wave-bottom"></div>
+
+</div>
+
+<!-- LOGIN PAGE -->
+
+<div id="page-login"
+     class="page">
+
+    <div class="wave-top"></div>
+
     <div class="auth-container">
-      <div class="auth-logo">
-        <div class="logo-icon-sm">🛡️</div>
-        <span class="auth-logo-text">Davao Safe</span>
-      </div>
-      <h2 class="auth-title">Login</h2>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="Enter your email" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="Enter your password" class="form-input" />
-        <span class="form-hint forgot-link" onclick="showPage('page-change-password')">Forgot password?</span>
-      </div>
-      <button class="btn-primary full-width" onclick="doLogin()">LOGIN</button>
-      <p class="auth-switch">Don't have an account? <span class="link" onclick="showPage('page-signup')">Sign up</span></p>
-      <div class="divider"><span>or</span></div>
-      <button class="btn-google">
-        <img src="https://www.google.com/favicon.ico" width="18" height="18" alt="Google" />
-        Continue with Google
-      </button>
-    </div>
-  </div>
 
-  <!-- SIGN UP PAGE -->
-  <div id="page-signup" class="page">
-    <div class="teal-header-bg"></div>
+        <h2 class="auth-title">
+            Login
+        </h2>
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input type="email"
+                   class="form-input"
+                   placeholder="Enter your email">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <div class="password-box">
+
+                <input type="password"
+                       class="form-input"
+                       placeholder="Enter your password">
+
+                <span class="eye-icon">
+                    👁
+                </span>
+
+            </div>
+
+            <span class="forgot-link"
+                  onclick="showPage('page-change-password')">
+
+                forgot password?
+
+            </span>
+
+        </div>
+
+        <button class="login-btn"
+                onclick="showPage('page-home')">
+
+            Login
+
+        </button>
+
+        <p class="bottom-text">
+
+            Don’t have an account yet?
+
+            <span onclick="showPage('page-signup')">
+
+                Sign up
+
+            </span>
+
+        </p>
+
+        <div class="divider">
+
+            <span></span>
+
+            or login with
+
+            <span></span>
+
+        </div>
+
+        <div class="google-login">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png">
+
+        </div>
+
+    </div>
+
+    <div class="wave-bottom"></div>
+
+</div>
+
+<!-- SIGNUP PAGE -->
+
+<div id="page-signup"
+     class="page">
+
+    <div class="wave-top"></div>
+
     <div class="auth-container">
-      <div class="auth-logo">
-        <div class="logo-icon-sm">🛡️</div>
-        <span class="auth-logo-text">Davao Safe</span>
-      </div>
-      <h2 class="auth-title">Sign up</h2>
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" placeholder="Enter your name" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="Enter your email" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label>Create password</label>
-        <input type="password" placeholder="Create a password" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label>Confirm password</label>
-        <input type="password" placeholder="Confirm password" class="form-input" />
-      </div>
-      <button class="btn-primary full-width" onclick="showPage('page-home')">Sign In</button>
-      <p class="auth-switch">Already have an account? <span class="link" onclick="showPage('page-login')">Login</span></p>
-    </div>
-  </div>
 
-  <!-- CHANGE PASSWORD PAGE -->
-  <div id="page-change-password" class="page">
-    <div class="teal-header-bg"></div>
+        <h2 class="auth-title">
+            Sign up
+        </h2>
+
+        <div class="form-group">
+
+            <label>Name</label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter your name">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input type="email"
+                   class="form-input"
+                   placeholder="Enter your email">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Create password</label>
+
+            <div class="password-box">
+
+                <input type="password"
+                       class="form-input"
+                       placeholder="Enter your password">
+
+                <span class="eye-icon">
+                    👁
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Confirm password</label>
+
+            <div class="password-box">
+
+                <input type="password"
+                       class="form-input"
+                       placeholder="Confirm password">
+
+                <span class="eye-icon">
+                    👁
+                </span>
+
+            </div>
+
+        </div>
+
+        <button class="login-btn"
+                onclick="showPage('page-home')">
+
+            Sign up
+
+        </button>
+
+        <p class="bottom-text">
+
+            Already have an account?
+
+            <span onclick="showPage('page-login')">
+
+                Login
+
+            </span>
+
+        </p>
+
+    </div>
+
+    <div class="wave-bottom"></div>
+
+</div>
+
+<!-- CHANGE PASSWORD PAGE -->
+
+<div id="page-change-password"
+     class="page">
+
+    <div class="wave-top"></div>
+
     <div class="auth-container">
-      <div class="auth-logo">
-        <div class="logo-icon-sm">🛡️</div>
-        <span class="auth-logo-text">Davao Safe</span>
-      </div>
-      <h2 class="auth-title">Change<br/>password</h2>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="Enter your email" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label>Change password</label>
-        <input type="password" placeholder="New password" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label>Confirm password</label>
-        <input type="password" placeholder="Confirm new password" class="form-input" />
-      </div>
-      <button class="btn-primary full-width" onclick="showPage('page-login')">Change</button>
-    </div>
-  </div>
 
-  <!-- HOME PAGE -->
-  <div id="page-home" class="page">
-    <div class="app-header">
-      <div class="header-top">
-        <img src="assets/icons/battery_full_light.svg" class="status-icon" alt="battery" />
-      </div>
-      <div class="app-brand">
-        <span class="app-brand-icon">🛡️</span>
-        <span class="app-brand-name">Davao Safe</span>
-      </div>
-      <div class="search-bar">
-        <img src="assets/icons/Search.svg" class="search-icon" alt="search" />
-        <input type="text" placeholder="Search..." class="search-input" onclick="showPage('page-search')" readonly />
-        <img src="assets/icons/Sort.svg" class="sort-icon" alt="sort" />
-      </div>
-    </div>
+        <button type="button"
+                class="back-btn"
+                onclick="showPage('page-login')">
 
-    <div class="app-content">
-      <!-- Status Banner -->
-      <div id="status-banner" class="status-banner safe">
-        <div class="status-info">
-          <span class="status-badge safe">SAFE</span>
-          <div class="status-details">
-            <div>Current status</div>
-            <div class="status-location">Davao City, PH</div>
-          </div>
-        </div>
-        <div class="weather-info">
-          <img src="assets/icons/Cloud_alt_duotone.svg" width="28" alt="weather" />
-          <div>
-            <div class="temp" id="home-temp">32°C</div>
-            <div class="weather-desc">Partly Cloudy</div>
-          </div>
-        </div>
-      </div>
+            ← Back
 
-      <!-- Alert Banner -->
-      <div class="alert-info-bar">
-        <span class="alert-dot red"></span>
-        <span class="alert-text">No active alerts in your area</span>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="section-title">Quick Actions</div>
-      <div class="quick-actions-grid">
-        <button class="quick-btn red" onclick="showPage('page-sos')">
-          <span class="quick-icon">🆘</span>
-          <span>Emergency SOS</span>
         </button>
-        <button class="quick-btn blue" onclick="showPage('page-map')">
-          <span class="quick-icon">🗺️</span>
-          <span>Evacuation Map</span>
+
+        <h2 class="auth-title">
+            Change<br>password
+        </h2>
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input type="email"
+                   class="form-input"
+                   placeholder="Enter your email">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Change password</label>
+
+            <div class="password-box">
+
+                <input type="password"
+                       id="newPassword"
+                       class="form-input"
+                       placeholder="Enter new password">
+
+                <span class="eye-icon">
+                    👁
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Confirm password</label>
+
+            <div class="password-box">
+
+                <input type="password"
+                       id="confirmPassword"
+                       class="form-input"
+                       placeholder="Confirm password">
+
+                <span class="eye-icon">
+                    👁
+                </span>
+
+            </div>
+
+        </div>
+
+        <button type="button"
+                class="login-btn"
+                onclick="changePassword()">
+
+            Change
+
         </button>
-        <button class="quick-btn teal" onclick="showPage('page-alerts')">
-          <span class="quick-icon">🔔</span>
-          <span>Alerts</span>
+
+    </div>
+
+    <div class="wave-bottom"></div>
+
+</div>
+
+<!-- HOME PAGE -->
+
+<div id="page-home"
+     class="page active">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="app-header">
+
+            <div class="app-title">Davao Safe</div>
+
+            <div class="app-meta">10:00</div>
+
+        </div>
+
+        <div class="search-panel">
+
+            <div class="search-box">
+
+                <span>🔍</span>
+                <input id="searchInput"
+                       type="search"
+                       placeholder="Search"
+                       oninput="updateSearchResults()">
+
+            </div>
+
+            <div class="search-filters">
+
+                <button class="chip active"
+                        onclick="setSearchFilter('All')">All</button>
+                <button class="chip"
+                        onclick="setSearchFilter('Alerts')">Alerts</button>
+                <button class="chip"
+                        onclick="setSearchFilter('Shelters')">Shelters</button>
+                <button class="chip"
+                        onclick="setSearchFilter('Articles')">Articles</button>
+
+            </div>
+
+        </div>
+
+        <div id="searchResults"
+             class="search-results hidden">
+
+            <div class="result-item">
+                <div class="result-title">Flood alert - Barangay 5</div>
+                <div class="result-subtitle">Flood advisory reported 12 mins ago</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-title">What to do during floods</div>
+                <div class="result-subtitle">Article · Preparedness guide</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-title">Calinan evacuation center</div>
+                <div class="result-subtitle">Shelter · 2 km away</div>
+            </div>
+
+        </div>
+
+        <div class="status-card safe">
+
+            <div>
+                <span class="status-pill">SAFE</span>
+                <p>No active threats detected</p>
+            </div>
+
+            <div class="weather-info">
+                <span>32°C</span>
+                <small>Partly cloudy</small>
+            </div>
+
+        </div>
+
+        <div class="home-grid">
+
+            <button class="action-card red"
+                    onclick="showPage('page-emergency')">
+
+                <div class="action-title">Emergency SOS</div>
+                <div class="action-caption">Send help immediately</div>
+
+            </button>
+
+            <button class="action-card blue"
+                    onclick="showPage('page-report')">
+
+                <div class="action-title">Report Incident</div>
+                <div class="action-caption">Tell us what happened</div>
+
+            </button>
+
+            <button class="action-card yellow"
+                    onclick="showPage('page-preparedness')">
+
+                <div class="action-title">Preparedness</div>
+                <div class="action-caption">Ready your family</div>
+
+            </button>
+
+            <button class="action-card teal"
+                    onclick="showPage('page-map')">
+
+                <div class="action-title">Flood Map</div>
+                <div class="action-caption">View affected areas</div>
+
+            </button>
+
+        </div>
+
+        <div class="recent-section">
+
+            <div class="recent-header">
+                <h3>Recent incidents</h3>
+                <button class="text-link"
+                        onclick="showPage('page-alerts')">View all</button>
+            </div>
+
+            <div class="recent-item-card">
+                <div>
+                    <strong>Rain flood in Buhangin</strong>
+                    <p>6 min ago · Davao City</p>
+                </div>
+            </div>
+
+            <div class="recent-item-card">
+                <div>
+                    <strong>Fire incident in Davao City</strong>
+                    <p>18 min ago · District 2</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+
+        <button class="nav-item active"
+                onclick="showPage('page-home')">
+            Home
         </button>
-        <button class="quick-btn yellow" onclick="showPage('page-report')">
-          <span class="quick-icon">📋</span>
-          <span>Report Incident</span>
+
+        <button class="nav-item"
+                onclick="showPage('page-map')">
+            Map
         </button>
-        <button class="quick-btn green" onclick="showPage('page-preparedness')">
-          <span class="quick-icon">✅</span>
-          <span>Preparedness</span>
+
+        <button class="nav-item"
+                onclick="showPage('page-alerts')">
+            Alerts
         </button>
-        <button class="quick-btn orange" onclick="showPage('page-profile')">
-          <span class="quick-icon">👤</span>
-          <span>Profile</span>
+
+        <button class="nav-item"
+                onclick="showPage('page-profile')">
+            Profile
         </button>
-      </div>
 
-      <!-- Nearby Facilities -->
-      <div class="section-title">Nearby Facilities</div>
-      <div class="facility-list">
-        <div class="facility-card">
-          <div class="facility-icon">🏥</div>
-          <div class="facility-info">
-            <div class="facility-name">Davao Medical Center</div>
-            <div class="facility-dist">1.2 km away</div>
-          </div>
-          <button class="facility-nav" onclick="showPage('page-map')">Navigate</button>
-        </div>
-        <div class="facility-card">
-          <div class="facility-icon">🏫</div>
-          <div class="facility-info">
-            <div class="facility-name">Buhangin Evacuation Center</div>
-            <div class="facility-dist">2.5 km away</div>
-          </div>
-          <button class="facility-nav" onclick="showPage('page-map')">Navigate</button>
-        </div>
-        <div class="facility-card">
-          <div class="facility-icon">👮</div>
-          <div class="facility-info">
-            <div class="facility-name">Davao City Police Office</div>
-            <div class="facility-dist">3.1 km away</div>
-          </div>
-          <button class="facility-nav" onclick="showPage('page-map')">Navigate</button>
-        </div>
-      </div>
-
-      <!-- Status Toggle (demo) -->
-      <div class="demo-toggle">
-        <span>Demo status: </span>
-        <button class="demo-btn" onclick="setStatus('safe')">Safe</button>
-        <button class="demo-btn warning" onclick="setStatus('warning')">Warning</button>
-        <button class="demo-btn danger" onclick="setStatus('danger')">Danger</button>
-      </div>
     </div>
 
-    <nav class="bottom-nav">
-      <button class="nav-btn active" onclick="showPage('page-home')">
-        <img src="assets/icons/Home.svg" alt="Home" />
-        <span>Home</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-map')">
-        <img src="assets/icons/Navigate.svg" alt="Map" />
-        <span>Map</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-alerts')">
-        <img src="assets/icons/Bell.svg" alt="Alerts" />
-        <span>Alerts</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-profile')">
-        <img src="assets/icons/User_alt.svg" alt="Profile" />
-        <span>Profile</span>
-      </button>
-    </nav>
-  </div>
+</div>
 
-  <!-- MAP PAGE -->
-  <div id="page-map" class="page">
-    <div class="app-header">
-      <div class="app-brand">
-        <span class="app-brand-icon">🛡️</span>
-        <span class="app-brand-name">Davao Safe</span>
-      </div>
-      <div class="search-bar">
-        <img src="assets/icons/Search.svg" class="search-icon" alt="search" />
-        <input type="text" placeholder="Search location..." class="search-input" />
-      </div>
+<!-- MAP PAGE -->
+
+<div id="page-map"
+     class="page">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="page-header">
+            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+            <h2>Flood Map</h2>
+        </div>
+
+        <div class="map-card">
+            <p>Interactive map placeholder for flood zones and evacuation routes.</p>
+        </div>
+
+        <div class="map-list">
+            <div class="map-list-item">
+                <strong>Lowland advisory</strong>
+                <p>Heavy rain expected in lowland areas</p>
+            </div>
+            <div class="map-list-item">
+                <strong>River rise alert</strong>
+                <p>River levels increasing near Talomo</p>
+            </div>
+        </div>
+
     </div>
-    <div class="map-container">
-      <div class="map-placeholder">
-        <div class="map-pins">
-          <div class="map-pin hospital" style="top:30%;left:40%">🏥</div>
-          <div class="map-pin evacuation" style="top:50%;left:60%">🏫</div>
-          <div class="map-pin police" style="top:65%;left:35%">👮</div>
-          <div class="map-pin you" style="top:48%;left:50%">📍</div>
-        </div>
-        <div class="map-bg-text">Davao City Map</div>
-      </div>
-      <div class="map-legend">
-        <div class="legend-item"><span>🏥</span> Hospital</div>
-        <div class="legend-item"><span>🏫</span> Evacuation</div>
-        <div class="legend-item"><span>👮</span> Police</div>
-        <div class="legend-item"><span>📍</span> You</div>
-      </div>
+
+    <div class="bottom-nav">
+        <button class="nav-item" onclick="showPage('page-home')">Home</button>
+        <button class="nav-item active" onclick="showPage('page-map')">Map</button>
+        <button class="nav-item" onclick="showPage('page-alerts')">Alerts</button>
+        <button class="nav-item" onclick="showPage('page-profile')">Profile</button>
     </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="showPage('page-home')">
-        <img src="assets/icons/Home.svg" alt="Home" />
-        <span>Home</span>
-      </button>
-      <button class="nav-btn active" onclick="showPage('page-map')">
-        <img src="assets/icons/Navigate.svg" alt="Map" />
-        <span>Map</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-alerts')">
-        <img src="assets/icons/Bell.svg" alt="Alerts" />
-        <span>Alerts</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-profile')">
-        <img src="assets/icons/User_alt.svg" alt="Profile" />
-        <span>Profile</span>
-      </button>
-    </nav>
-  </div>
 
-  <!-- ALERTS PAGE -->
-  <div id="page-alerts" class="page">
-    <div class="app-header">
-      <div class="app-brand">
-        <span class="app-brand-icon">🛡️</span>
-        <span class="app-brand-name">Davao Safe</span>
-      </div>
+</div>
+
+<!-- ALERTS PAGE -->
+
+<div id="page-alerts"
+     class="page">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="page-header">
+            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+            <h2>Alerts</h2>
+        </div>
+
+        <div class="alert-card warning">
+            <span class="status-pill">Warning</span>
+            <p>Heavy rain advisory in lowland areas</p>
+            <button class="view-alert-btn" onclick="showAlertDetail('warning')">View advisory</button>
+        </div>
+
+        <div class="alert-card danger">
+            <span class="status-pill">Danger</span>
+            <p>Flood watch near Talomo River</p>
+            <button class="view-alert-btn" onclick="showAlertDetail('danger')">View advisory</button>
+        </div>
+
+        <div id="alertDetail" class="alert-detail hidden">
+            <div class="alert-detail-header">
+                <h3 id="alertDetailTitle">Advisory title</h3>
+                <button class="small-btn" onclick="closeAlertDetail()">Close</button>
+            </div>
+            <p id="alertDetailText">Full advisory details appear here when an alert is selected.</p>
+            <div class="alert-detail-meta">
+                <strong>Updated:</strong> 10 mins ago
+            </div>
+        </div>
+
     </div>
-    <div class="app-content">
-      <div class="page-title-row">
-        <h2 class="page-section-title">Alerts</h2>
-        <div class="alert-pills">
-          <span class="pill red-pill active-pill">ASA alert active</span>
-          <span class="pill yellow-pill">Heavy rain adviso.</span>
-        </div>
-      </div>
 
-      <div class="alert-card danger-card">
-        <div class="alert-card-header">
-          <span class="pill red-pill">Danger</span>
-          <span class="alert-time">Just now</span>
-        </div>
-        <h3>Typhoon Signal #1 — Davao Region</h3>
-        <p>Issued by PAGASA. Affected areas include Calinan, Toril. Recommended action: prepare go-bag and monitor updates.</p>
-        <button class="btn-dark">View full advisory</button>
-      </div>
-
-      <div class="alert-card warning-card">
-        <div class="alert-card-header">
-          <span class="pill yellow-pill">Warning</span>
-          <span class="alert-time">25 mins ago</span>
-        </div>
-        <h3>Heavy rain advisory — lowland areas</h3>
-        <p>Expect 3–6 hrs of continuous moderate to heavy rainfall. Avoid low-lying roads.</p>
-      </div>
-
-      <div class="alert-card info-card">
-        <div class="alert-card-header">
-          <span class="pill blue-pill">Info</span>
-          <span class="alert-time">2 hrs ago</span>
-        </div>
-        <h3>Flood subsiding in Matina</h3>
-        <p>Water levels returning to normal. Residents may return after barangay clearance.</p>
-      </div>
+    <div class="bottom-nav">
+        <button class="nav-item" onclick="showPage('page-home')">Home</button>
+        <button class="nav-item" onclick="showPage('page-map')">Map</button>
+        <button class="nav-item active" onclick="showPage('page-alerts')">Alerts</button>
+        <button class="nav-item" onclick="showPage('page-profile')">Profile</button>
     </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="showPage('page-home')">
-        <img src="assets/icons/Home.svg" alt="Home" />
-        <span>Home</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-map')">
-        <img src="assets/icons/Navigate.svg" alt="Map" />
-        <span>Map</span>
-      </button>
-      <button class="nav-btn active" onclick="showPage('page-alerts')">
-        <img src="assets/icons/Bell.svg" alt="Alerts" />
-        <span>Alerts</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-profile')">
-        <img src="assets/icons/User_alt.svg" alt="Profile" />
-        <span>Profile</span>
-      </button>
-    </nav>
-  </div>
 
-  <!-- PROFILE PAGE -->
-  <div id="page-profile" class="page">
-    <div class="app-header">
-      <div class="app-brand">
-        <span class="app-brand-icon">🛡️</span>
-        <span class="app-brand-name">Davao Safe</span>
-      </div>
+</div>
+
+<!-- PROFILE PAGE -->
+
+<div id="page-profile"
+     class="page">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="page-header">
+            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+            <h2>Profile</h2>
+        </div>
+
+        <div class="profile-card">
+            <h3>Jane Doe</h3>
+            <p>Location: Davao City</p>
+            <p>Status: Safe</p>
+        </div>
+
+        <div class="profile-actions">
+            <button class="login-btn" onclick="alert('Profile settings not available yet.')">Account settings</button>
+            <button class="login-btn" onclick="alert('Help center is coming soon.')">Help center</button>
+        </div>
+
     </div>
-    <div class="app-content">
-      <div class="profile-avatar-section">
-        <div class="profile-avatar">👤</div>
-        <div class="profile-name" id="profile-name">Juan dela Cruz</div>
-        <div class="profile-email" id="profile-email">juan@example.com</div>
-      </div>
-      <div class="profile-menu">
-        <div class="profile-menu-item">
-          <span>📍 Location Settings</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="profile-menu-item">
-          <span>🔔 Notification Preferences</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="profile-menu-item">
-          <span>👨‍👩‍👧 Emergency Contacts</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="profile-menu-item">
-          <span>🔒 Privacy & Security</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="profile-menu-item">
-          <span>ℹ️ About DavaoSafe</span>
-          <span class="chevron">›</span>
-        </div>
-      </div>
-      <button class="btn-outline full-width" onclick="showPage('page-login')">Log Out</button>
+
+    <div class="bottom-nav">
+        <button class="nav-item" onclick="showPage('page-home')">Home</button>
+        <button class="nav-item" onclick="showPage('page-map')">Map</button>
+        <button class="nav-item" onclick="showPage('page-alerts')">Alerts</button>
+        <button class="nav-item active" onclick="showPage('page-profile')">Profile</button>
     </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="showPage('page-home')">
-        <img src="assets/icons/Home.svg" alt="Home" />
-        <span>Home</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-map')">
-        <img src="assets/icons/Navigate.svg" alt="Map" />
-        <span>Map</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-alerts')">
-        <img src="assets/icons/Bell.svg" alt="Alerts" />
-        <span>Alerts</span>
-      </button>
-      <button class="nav-btn active" onclick="showPage('page-profile')">
-        <img src="assets/icons/User_alt.svg" alt="Profile" />
-        <span>Profile</span>
-      </button>
-    </nav>
-  </div>
 
-  <!-- EMERGENCY SOS PAGE -->
-  <div id="page-sos" class="page">
-    <div class="app-header">
-      <button class="back-btn" onclick="showPage('page-home')">← Back</button>
-      <h2 class="header-title">Emergency SOS</h2>
+</div>
+
+<!-- EMERGENCY PAGE -->
+
+<div id="page-emergency"
+     class="page">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="page-header">
+            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+            <h2>Emergency SOS</h2>
+        </div>
+
+        <div class="sos-card">
+            <div class="sos-icon">🚨</div>
+            <h3>Send emergency SOS?</h3>
+            <p>Your GPS location and profile will be sent to DDRMO and local responders immediately.</p>
+            <div class="location-box">
+                <p><strong>Your location</strong></p>
+                <p>Buhangin, Davao City</p>
+            </div>
+            <div class="sos-actions">
+                <button class="cancel-btn" onclick="cancelSOS()">Cancel</button>
+                <button class="login-btn" onclick="sendSOS()">Send SOS</button>
+            </div>
+        </div>
+
+        <div class="hotline-list">
+            <div class="hotline-item">
+                <strong>CDRRMO Davao</strong>
+                <button class="small-btn" onclick="alert('Calling CDRRMO Davao...')">Call</button>
+            </div>
+            <div class="hotline-item">
+                <strong>PNP-166</strong>
+                <button class="small-btn" onclick="alert('Calling Philippine National Police...')">Call</button>
+            </div>
+        </div>
+
     </div>
-    <div class="app-content sos-content">
-      <div class="sos-icon-circle">🆘</div>
-      <h2 class="sos-title">Send emergency SOS?</h2>
-      <p class="sos-desc">Your GPS location will be sent to emergency responders and your emergency contacts immediately.</p>
 
-      <div class="sos-location-card">
-        <div class="location-label">Your Location</div>
-        <div class="location-value">Buhangin, Davao City, PH</div>
-        <div class="location-coords">7.09° N, 125.61° E</div>
-      </div>
+</div>
 
-      <div class="sos-contacts">
-        <div class="contact-row">
-          <span>📞 Disaster Risk Reduction (CDRRMO)</span>
-          <label class="toggle"><input type="checkbox" checked /><span class="slider"></span></label>
+<!-- REPORT PAGE -->
+
+<div id="page-report"
+     class="page">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="page-header">
+            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+            <h2>Report an Incident</h2>
         </div>
-        <div class="contact-row">
-          <span>🚒 Bureau of Fire Protection</span>
-          <label class="toggle"><input type="checkbox" checked /><span class="slider"></span></label>
-        </div>
-      </div>
 
-      <div class="sos-btn-row">
-        <button class="btn-outline" onclick="showPage('page-home')">Cancel</button>
-        <button class="btn-danger" onclick="triggerSOS()">Send SOS</button>
-      </div>
+        <div class="report-form">
+
+            <label>Incident type</label>
+            <input id="incidentType" class="form-input" placeholder="Enter incident type">
+
+            <label>Description</label>
+            <textarea id="incidentDescription" class="form-input" rows="4" placeholder="Describe what happened"></textarea>
+
+            <label>Photo / Video</label>
+            <button class="upload-btn" onclick="alert('Upload not available in prototype.')">Tap to upload photo or video</button>
+
+            <label>Your location</label>
+            <input id="incidentLocation" class="form-input" value="Buhangin, Davao City">
+
+            <button class="login-btn" onclick="submitIncident()">Submit report</button>
+
+        </div>
+
     </div>
-  </div>
 
-  <!-- REPORT INCIDENT PAGE -->
-  <div id="page-report" class="page">
-    <div class="app-header">
-      <button class="back-btn" onclick="showPage('page-home')">← Back</button>
-      <h2 class="header-title">Report an Incident</h2>
+</div>
+
+<!-- PREPAREDNESS PAGE -->
+
+<div id="page-preparedness"
+     class="page">
+
+    <div class="wave-top"></div>
+    <div class="wave-bottom"></div>
+
+    <div class="app-shell">
+
+        <div class="page-header">
+            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+            <h2>Preparedness</h2>
+        </div>
+
+        <div class="checklist-card">
+            <h3>Go-bag checklist</h3>
+            <label><input type="checkbox"> Water (3-day supply)</label>
+            <label><input type="checkbox"> First aid kit</label>
+            <label><input type="checkbox"> Emergency documents</label>
+            <label><input type="checkbox"> Flashlight & batteries</label>
+            <label><input type="checkbox"> Food supply</label>
+        </div>
+
+        <div class="video-guides">
+            <button class="guide-card" onclick="alert('Opening preparedness guide...')">
+                <strong>What to do during floods</strong>
+                <small>4:32 · CDRRMO</small>
+            </button>
+            <button class="guide-card" onclick="alert('Opening family emergency plan guide...')">
+                <strong>Building your family emergency plan</strong>
+                <small>6:07 · NDRRMC</small>
+            </button>
+        </div>
+
     </div>
-    <div class="app-content">
-      <div class="form-group">
-        <label>Incident type</label>
-        <select class="form-input">
-          <option>Flood</option>
-          <option>Fire</option>
-          <option>Typhoon damage</option>
-          <option>Road accident</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-input form-textarea" placeholder="Describe the incident..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Photo / Video</label>
-        <div class="upload-area">
-          <span>📷 Tap to upload photo or video</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Your Location</label>
-        <input type="text" class="form-input" value="Buhangin, Davao City (7.09° N, 125.61° E)" readonly />
-      </div>
 
-      <div class="emergency-numbers">
-        <div class="emergency-number-row">
-          <span>📞 CDRRMO Disaster Hotline</span>
-          <a href="tel:117" class="call-link">117</a>
-        </div>
-        <div class="emergency-number-row">
-          <span>🚒 Bureau of Fire Protection</span>
-          <a href="tel:119" class="call-link">119</a>
-        </div>
-      </div>
+</div>
 
-      <button class="btn-primary full-width" onclick="submitReport()">Submit Report</button>
-    </div>
-  </div>
+<script>
 
-  <!-- PREPAREDNESS PAGE -->
-  <div id="page-preparedness" class="page">
-    <div class="app-header">
-      <button class="back-btn" onclick="showPage('page-home')">← Back</button>
-      <h2 class="header-title">Preparedness</h2>
-    </div>
-    <div class="app-content">
-      <div class="checklist-section">
-        <div class="section-row">
-          <span class="section-label">Go-bag checklist</span>
-          <span class="progress-text" id="checklist-progress">3 / 5 done</span>
-        </div>
-        <div class="checklist-items" id="checklist-items">
-          <label class="checklist-item"><input type="checkbox" checked onchange="updateProgress()" /> Water (3-day supply)</label>
-          <label class="checklist-item"><input type="checkbox" checked onchange="updateProgress()" /> First aid kit</label>
-          <label class="checklist-item"><input type="checkbox" onchange="updateProgress()" /> Emergency documents</label>
-          <label class="checklist-item"><input type="checkbox" checked onchange="updateProgress()" /> Flashlight &amp; batteries</label>
-          <label class="checklist-item"><input type="checkbox" onchange="updateProgress()" /> Non-perishable food</label>
-        </div>
-      </div>
+window.onload = function(){
 
-      <div class="section-title">Video guides</div>
-      <div class="video-list">
-        <div class="video-card">
-          <div class="video-thumb">▶️</div>
-          <div class="video-info">
-            <div class="video-title">What to do during a flood</div>
-            <div class="video-source">NDRRMC · Preparedness guide</div>
-          </div>
-        </div>
-        <div class="video-card">
-          <div class="video-thumb">▶️</div>
-          <div class="video-info">
-            <div class="video-title">Building your family emergency plan</div>
-            <div class="video-source">NDRRMC · Preparedness guide</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    /* PAGE NAVIGATION */
+    function showPage(pageId){
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => page.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        updateNav(pageId);
+    }
 
-  <!-- SEARCH PAGE -->
-  <div id="page-search" class="page">
-    <div class="app-header teal-header">
-      <button class="back-btn white-back" onclick="showPage('page-home')">← Back</button>
-      <h2 class="header-title white-title">Search</h2>
-    </div>
-    <div class="app-content">
-      <div class="search-bar-large">
-        <img src="assets/icons/Search.svg" class="search-icon" alt="search" />
-        <input type="text" id="search-input" placeholder="Search alerts, shelters, articles..." class="search-input-large" oninput="doSearch(this.value)" />
-        <button class="clear-btn" onclick="clearSearch()">✕</button>
-      </div>
+    function updateNav(pageId){
+        const navButtons = document.querySelectorAll('.bottom-nav .nav-item');
+        navButtons.forEach(button => {
+            button.classList.toggle('active', button.getAttribute('onclick').includes(pageId));
+        });
+    }
 
-      <div class="search-filter-tabs">
-        <button class="filter-tab active" onclick="filterTab(this, 'all')">All</button>
-        <button class="filter-tab" onclick="filterTab(this, 'alerts')">Alerts</button>
-        <button class="filter-tab" onclick="filterTab(this, 'shelters')">Shelters</button>
-        <button class="filter-tab" onclick="filterTab(this, 'articles')">Articles</button>
-      </div>
+    window.showPage = showPage;
 
-      <div class="search-results" id="search-results">
-        <div class="search-result-item alert-result">
-          <span class="result-type-icon">🔔</span>
-          <div>
-            <div class="result-title">Flood alert — Buhangin</div>
-            <div class="result-meta">Alert · 3 mins ago</div>
-          </div>
-        </div>
-        <div class="search-result-item article-result">
-          <span class="result-type-icon">📄</span>
-          <div>
-            <div class="result-title">What to do during a flood</div>
-            <div class="result-meta">Article · Preparedness guide</div>
-          </div>
-        </div>
-        <div class="search-result-item shelter-result">
-          <span class="result-type-icon">📍</span>
-          <div>
-            <div class="result-title">Calinan Evacuation Center</div>
-            <div class="result-meta">Shelter · 3.2 km away</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="showPage('page-home')">
-        <img src="assets/icons/Home.svg" alt="Home" />
-        <span>Home</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-map')">
-        <img src="assets/icons/Navigate.svg" alt="Map" />
-        <span>Map</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-alerts')">
-        <img src="assets/icons/Bell.svg" alt="Alerts" />
-        <span>Alerts</span>
-      </button>
-      <button class="nav-btn" onclick="showPage('page-profile')">
-        <img src="assets/icons/User_alt.svg" alt="Profile" />
-        <span>Profile</span>
-      </button>
-    </nav>
-  </div>
+    window.changePassword = function() {
+        const newPass = document.getElementById('newPassword').value;
+        const confirmPass = document.getElementById('confirmPassword').value;
+        if (newPass === confirmPass && newPass.trim() !== '') {
+            showPage('page-login');
+        } else {
+            alert('Passwords do not match or are empty.');
+        }
+    };
 
-  <!-- SOS SUCCESS MODAL -->
-  <div id="sos-modal" class="modal hidden">
-    <div class="modal-box">
-      <div class="modal-icon">✅</div>
-      <h3>SOS Sent!</h3>
-      <p>Emergency services and your contacts have been notified with your location.</p>
-      <button class="btn-primary" onclick="closeModal()">OK</button>
-    </div>
-  </div>
+    window.sendSOS = function(){
+        alert('Emergency SOS sent. Help is on the way.');
+        showPage('page-home');
+    };
 
-  <script src="ts/app.js"></script>
+    window.cancelSOS = function(){
+        showPage('page-home');
+    };
+
+    window.submitIncident = function(){
+        const incidentType = document.getElementById('incidentType').value.trim();
+        const incidentLocation = document.getElementById('incidentLocation').value.trim();
+        if(!incidentType){
+            alert('Please enter the incident type.');
+            return;
+        }
+        if(!incidentLocation){
+            alert('Please enter your location.');
+            return;
+        }
+        alert('Incident reported successfully.');
+        showPage('page-home');
+    };
+
+    window.showAlertDetail = function(type){
+        const details = {
+            warning: {
+                title: 'Heavy Rain Advisory',
+                text: 'A heavy rain advisory is active in lowland areas. Residents should avoid flooded roads, monitor local weather updates, and move to higher ground if necessary.',
+                updated: '8 mins ago'
+            },
+            danger: {
+                title: 'Flood Watch Near Talomo River',
+                text: 'A flood watch is in effect near Talomo River. Stay alert for rising water levels, secure belongings, and follow instructions from local authorities.',
+                updated: '5 mins ago'
+            }
+        };
+        const detail = details[type] || details.warning;
+        document.getElementById('alertDetailTitle').textContent = detail.title;
+        document.getElementById('alertDetailText').textContent = detail.text;
+        document.querySelector('#alertDetail .alert-detail-meta').innerHTML = `<strong>Updated:</strong> ${detail.updated}`;
+        document.getElementById('alertDetail').classList.remove('hidden');
+    };
+
+    window.closeAlertDetail = function(){
+        document.getElementById('alertDetail').classList.add('hidden');
+    };
+
+    window.updateSearchResults = function(){
+        const query = document.getElementById('searchInput').value.trim();
+        const results = document.getElementById('searchResults');
+        if(query.length > 0){
+            results.classList.remove('hidden');
+        } else {
+            results.classList.add('hidden');
+        }
+    };
+
+    window.setSearchFilter = function(filter){
+        document.querySelectorAll('.search-filters .chip').forEach(chip => {
+            chip.classList.toggle('active', chip.textContent === filter);
+        });
+        document.getElementById('searchInput').placeholder = `Search ${filter}`;
+        updateSearchResults();
+    };
+
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    getStartedBtn.addEventListener('click', function(){
+        showPage('page-login');
+    });
+
+    const eyeIcons = document.querySelectorAll('.eye-icon');
+    eyeIcons.forEach(icon => {
+        icon.addEventListener('click', function(){
+            const input = this.parentElement.querySelector('input');
+            if(input.type === 'password'){
+                input.type = 'text';
+                this.innerHTML = '🙈';
+            } else {
+                input.type = 'password';
+                this.innerHTML = '👁';
+            }
+        });
+    });
+
+};
+
+</script>
+
 </body>
 </html>
+```
