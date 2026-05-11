@@ -1,881 +1,1095 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Davao Safe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet"
-        href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
-        rel="stylesheet">
+body{overflow:hidden;background:#111;}
+
+/* PAGE */
+.page{
+    position:absolute;top:0;left:0;width:100%;height:100vh;
+    display:none;overflow:hidden;
+    background:linear-gradient(to bottom,#38efd0 0%,#ffffff 48%,#38efd0 100%);
+}
+.page.active{display:flex;flex-direction:column;}
+
+/* SCROLLABLE SHELL */
+.app-shell{
+    flex:1;overflow-y:auto;overflow-x:hidden;
+    padding:28px 20px 100px;
+    -webkit-overflow-scrolling:touch;
+}
+
+.status-bar{
+    display:flex;justify-content:space-between;align-items:center;
+    color:#0d3f2a;font-weight:700;margin-bottom:24px;padding:0 6px;
+}
+
+/* WAVES */
+.wave-top{
+    position:fixed;top:70px;left:-10%;width:120%;height:100px;
+    border-top:2px solid rgba(0,0,0,0.15);border-radius:50%;pointer-events:none;z-index:0;
+}
+.wave-bottom{
+    position:fixed;bottom:70px;left:-10%;width:120%;height:100px;
+    border-bottom:2px solid rgba(0,0,0,0.15);border-radius:50%;pointer-events:none;z-index:0;
+}
+
+/* SPLASH */
+.splash-layout{
+    flex:1;display:flex;flex-direction:column;justify-content:space-between;
+    align-items:center;padding:60px 20px 50px;
+}
+.logo-title{
+    font-size:78px;line-height:0.9;font-weight:900;
+    text-align:center;color:#000;text-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+.splash-footer{display:flex;flex-direction:column;align-items:center;}
+.start-btn{
+    border:none;background:none;font-size:42px;color:#8d8d8d;cursor:pointer;
+    padding:12px 20px;border-radius:12px;transition:.2s;font-family:'Nunito',sans-serif;
+}
+.start-btn:hover{background:rgba(255,255,255,0.4);}
+.life-text{margin-top:14px;letter-spacing:5px;font-size:11px;}
+
+/* AUTH CONTAINER */
+.auth-container{
+    flex:1;overflow-y:auto;padding:60px 28px 40px;
+    margin:70px 24px 40px;background:#fff;
+    border-radius:32px;box-shadow:0 18px 50px rgba(0,0,0,0.1);
+}
+.auth-title{
+    font-size:52px;line-height:0.95;font-weight:900;
+    margin-bottom:36px;color:#000;
+}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;margin-bottom:8px;font-size:15px;font-weight:700;}
+.form-input{
+    width:100%;height:52px;padding:0 16px;
+    border:2px solid #e5e5e5;border-radius:12px;
+    outline:none;background:#fff;font-size:15px;
+}
+.form-input::placeholder{color:#b7b7b7;}
+textarea.form-input{height:auto;padding:14px 16px;resize:none;}
+
+/* PASSWORD */
+.password-box{position:relative;width:100%;}
+.eye-icon{
+    position:absolute;right:16px;top:50%;transform:translateY(-50%);
+    cursor:pointer;width:28px;height:28px;
+    display:flex;justify-content:center;align-items:center;border-radius:50%;
+}
+
+/* FORGOT */
+.forgot-link{
+    display:inline-block;width:100%;text-align:right;
+    font-size:12px;margin-top:10px;cursor:pointer;padding:4px 0;
+}
+
+/* BUTTONS */
+.login-btn{
+    width:100%;height:54px;border:none;border-radius:14px;
+    background:linear-gradient(90deg,#18e0c0,#00d4aa);
+    color:#fff;font-size:17px;font-weight:800;
+    margin-top:25px;cursor:pointer;transition:.2s;
+    box-shadow:0 5px 14px rgba(0,0,0,0.15);
+    -webkit-tap-highlight-color:transparent;
+}
+.login-btn:hover{transform:translateY(-2px);}
+.login-btn:active{transform:translateY(0) scale(0.98);}
+
+.bottom-text{text-align:center;margin-top:18px;font-size:13px;color:#777;line-height:1.5;}
+.bottom-text span{color:#18e0c0;font-weight:800;cursor:pointer;padding:3px 4px;}
+
+.back-btn{
+    border:none;background:none;color:#18e0c0;
+    font-size:15px;font-weight:800;margin-bottom:24px;cursor:pointer;padding:8px 0;
+}
+
+.divider{display:flex;align-items:center;gap:12px;margin:30px 0;font-size:12px;color:#777;}
+.divider span{flex:1;height:1px;background:#ddd;}
+
+.google-login{display:flex;justify-content:center;align-items:center;}
+.google-login img{width:52px;height:52px;cursor:pointer;}
+
+/* HOME */
+.app-header,.page-header{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:12px;margin-bottom:20px;
+}
+.app-title{font-size:28px;font-weight:900;color:#0d3f2a;}
+.app-meta{font-size:14px;color:#0d3f2a;font-weight:700;}
+
+/* SEARCH */
+.search-panel{margin-bottom:18px;}
+.search-box{
+    display:flex;align-items:center;gap:12px;padding:14px 16px;
+    border-radius:18px;background:rgba(255,255,255,0.9);
+    box-shadow:0 8px 24px rgba(0,0,0,0.08);margin-bottom:14px;
+}
+.search-box span{font-size:18px;}
+.search-box input{width:100%;border:none;outline:none;background:transparent;font-size:15px;color:#222;}
+.search-filters{display:flex;gap:10px;flex-wrap:wrap;}
+.chip{
+    border:none;padding:10px 14px;border-radius:999px;
+    background:rgba(255,255,255,0.7);color:#0d3f2a;font-weight:700;
+    cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent;
+}
+.chip.active,.chip:hover{background:#18e0c0;color:#fff;}
+.chip:active{transform:scale(0.95);}
+
+.search-results{margin-bottom:18px;}
+.search-results.hidden{display:none;}
+.result-item{padding:16px;border-radius:18px;background:rgba(255,255,255,0.9);margin-bottom:12px;}
+.result-title{font-weight:800;margin-bottom:6px;}
+.result-subtitle{font-size:13px;color:#555;}
+
+/* STATUS CARD */
+.status-card{
+    display:flex;justify-content:space-between;align-items:center;gap:16px;
+    padding:20px;border-radius:28px;background:#2fc29e;color:#fff;
+    margin-bottom:20px;box-shadow:0 14px 40px rgba(1,86,68,0.12);
+}
+.status-pill{
+    display:inline-flex;padding:8px 12px;border-radius:999px;
+    background:rgba(255,255,255,0.2);color:#fff;font-weight:800;margin-bottom:12px;
+}
+.weather-info{text-align:right;}
+.weather-info span{display:block;font-size:32px;font-weight:900;}
+.weather-info small{color:rgba(255,255,255,0.9);}
+
+/* HOME GRID */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.action-card{
+    min-height:130px;border:none;padding:20px;color:#fff;
+    text-align:left;cursor:pointer;transition:.2s;border-radius:24px;
+    background:rgba(255,255,255,0.92);box-shadow:0 12px 28px rgba(0,0,0,0.08);
+    -webkit-tap-highlight-color:transparent;
+}
+.action-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(0,0,0,0.14);}
+.action-card:active{transform:translateY(-1px) scale(0.98);}
+.action-title{font-size:16px;font-weight:900;margin-bottom:8px;}
+.action-caption{font-size:13px;opacity:.9;}
+.action-card.red{background:#ff4d4d;}
+.action-card.blue{background:#4d7cff;}
+.action-card.yellow{background:#f5b942;color:#111;}
+.action-card.teal{background:#18e0c0;}
+
+/* RECENT */
+.recent-section{margin-bottom:20px;}
+.recent-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.recent-header h3{font-size:18px;}
+.text-link{border:none;background:none;color:#18e0c0;font-weight:800;cursor:pointer;padding:8px 4px;}
+.recent-item-card{
+    padding:18px;display:flex;gap:16px;align-items:center;
+    margin-bottom:12px;border-radius:24px;background:rgba(255,255,255,0.92);
+    box-shadow:0 12px 28px rgba(0,0,0,0.08);
+}
+.recent-item-card p{color:#555;font-size:13px;margin-top:6px;}
+
+/* BOTTOM NAV */
+.bottom-nav{
+    position:fixed;left:0;right:0;bottom:0;
+    display:flex;justify-content:space-around;gap:10px;
+    padding:14px 18px;background:rgba(255,255,255,0.97);
+    box-shadow:0 -10px 30px rgba(0,0,0,0.08);z-index:100;
+}
+.nav-item{
+    flex:1;border:none;background:rgba(255,255,255,0.8);border-radius:18px;
+    padding:12px 0;color:#0d3f2a;font-weight:700;cursor:pointer;transition:.2s;
+    font-size:14px;-webkit-tap-highlight-color:transparent;
+}
+.nav-item.active,.nav-item:hover{background:#18e0c0;color:#fff;}
+.nav-item:active{transform:scale(0.96);}
+
+.page-header h2{font-size:26px;font-weight:900;}
+.page-header .back-btn{
+    border:none;background:none;font-size:15px;font-weight:800;
+    color:#0d3f2a;cursor:pointer;padding:8px 4px;
+    -webkit-tap-highlight-color:transparent;
+}
+.page-header .back-btn:active{opacity:0.6;}
+
+/* ==========================
+   FLOOD MAP PAGE (new design)
+   ========================== */
+.map-page-header{
+    background:#18c9a8;padding:16px 20px 14px;
+    display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:10;
+}
+.map-page-header h2{
+    font-size:20px;font-weight:900;color:#fff;text-align:center;flex:1;
+}
+.map-menu-btn{
+    border:none;background:none;color:#fff;font-size:22px;cursor:pointer;
+    padding:4px 8px;-webkit-tap-highlight-color:transparent;
+}
+
+.map-legend{
+    display:flex;gap:14px;flex-wrap:wrap;
+    padding:12px 16px;background:#fff;
+    border-bottom:1px solid #eee;
+}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#333;}
+.legend-dot{width:12px;height:12px;border-radius:50%;}
+.legend-dot.high{background:#e05c4a;}
+.legend-dot.medium{background:#e8a442;}
+.legend-dot.low{background:#8fc96e;}
+.legend-dot.evac{background:#5b9bd5;}
+
+/* VISUAL MAP */
+.flood-map-visual{
+    background:#c8e6b2;margin:14px;border-radius:20px;
+    padding:18px;position:relative;min-height:200px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);overflow:hidden;
+}
+.map-district-pin{
+    position:absolute;display:flex;flex-direction:column;align-items:center;
+    cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent;
+}
+.map-district-pin:active{transform:scale(0.95);}
+.district-box{
+    padding:10px 14px;border-radius:12px;font-size:13px;font-weight:800;
+    color:#fff;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    white-space:nowrap;
+}
+.district-box.high{background:#e05c4a;}
+.district-box.medium{background:#e8a442;}
+.district-box.low{background:#8fc96e;}
+.district-box.evac{background:#5b9bd5;}
+
+.pin-dot{
+    width:12px;height:12px;border-radius:50%;
+    border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    margin-top:4px;
+}
+.pin-dot.high{background:#e05c4a;}
+.pin-dot.medium{background:#e8a442;}
+.pin-dot.low{background:#8fc96e;}
+.pin-dot.evac{background:#5b9bd5;}
+
+/* DISTRICT INFO CARD */
+.district-info-card{
+    background:#fff;margin:0 14px 14px;border-radius:20px;
+    padding:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);
+}
+.district-info-card h3{font-size:18px;font-weight:900;color:#111;margin-bottom:14px;}
+.info-row{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;font-size:14px;
+}
+.info-label{color:#888;font-weight:600;}
+.info-value{font-weight:800;color:#111;}
+.risk-badge{
+    padding:5px 14px;border-radius:999px;font-size:13px;font-weight:800;color:#fff;
+}
+.risk-badge.high{background:#e05c4a;}
+.risk-badge.medium{background:#e8a442;}
+.risk-badge.low{background:#8fc96e;}
+.water-rising{color:#e05c4a;font-weight:900;}
+
+.directions-btn{
+    width:100%;height:48px;border:none;border-radius:14px;
+    background:linear-gradient(90deg,#18e0c0,#00d4aa);
+    color:#fff;font-size:15px;font-weight:800;
+    margin-top:14px;cursor:pointer;transition:.2s;
+    box-shadow:0 5px 14px rgba(0,0,0,0.15);
+    -webkit-tap-highlight-color:transparent;
+}
+.directions-btn:hover{transform:translateY(-2px);}
+.directions-btn:active{transform:scale(0.98);}
+
+/* EVACUATION LIST */
+.evac-section{
+    background:#fff;margin:0 14px 14px;border-radius:20px;
+    padding:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);
+}
+.evac-section h3{font-size:17px;font-weight:900;color:#111;margin-bottom:16px;}
+.evac-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 0;border-bottom:1px solid #f0f0f0;
+}
+.evac-item:last-child{border-bottom:none;}
+.evac-left{display:flex;align-items:center;gap:10px;}
+.evac-dot{width:12px;height:12px;border-radius:50%;background:#5b9bd5;flex-shrink:0;}
+.evac-name{font-size:14px;font-weight:700;color:#111;}
+.evac-dist{font-size:14px;font-weight:700;color:#555;}
+.evac-nav-btn{
+    border:none;background:#18e0c0;color:#fff;
+    border-radius:10px;padding:8px 14px;font-size:12px;font-weight:800;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.2s;
+}
+.evac-nav-btn:active{transform:scale(0.95);}
+
+/* ALERTS PAGE */
+.alert-card{
+    padding:22px;margin-bottom:18px;border-radius:24px;
+    box-shadow:0 12px 28px rgba(0,0,0,0.08);
+}
+.alert-card.warning{background:#fff3eb;}
+.alert-card.danger{background:#ffe6e6;}
+.alert-card p{color:#334;line-height:1.6;margin-top:8px;}
+.view-alert-btn{
+    margin-top:14px;border:none;background:#18e0c0;color:#fff;
+    padding:12px 18px;border-radius:14px;cursor:pointer;font-weight:800;
+    width:100%;font-size:15px;-webkit-tap-highlight-color:transparent;transition:.2s;
+}
+.view-alert-btn:active{transform:scale(0.97);}
+.alert-detail{
+    padding:20px;border-radius:22px;background:rgba(255,255,255,0.95);
+    box-shadow:0 16px 34px rgba(0,0,0,0.1);margin-top:16px;
+}
+.alert-detail.hidden{display:none;}
+.alert-detail-header{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:12px;margin-bottom:12px;
+}
+.alert-detail-meta{margin-top:14px;color:#555;font-size:13px;}
+
+/* PROFILE */
+.profile-card{
+    padding:22px;margin-bottom:18px;border-radius:24px;
+    background:rgba(255,255,255,0.92);box-shadow:0 12px 28px rgba(0,0,0,0.08);
+}
+.profile-card h3{font-size:22px;margin-bottom:8px;}
+.profile-card p{color:#555;margin-bottom:4px;}
+.profile-actions{display:grid;gap:12px;}
+
+/* EMERGENCY */
+.sos-card{
+    padding:22px;margin-bottom:18px;border-radius:24px;
+    background:rgba(255,255,255,0.92);box-shadow:0 12px 28px rgba(0,0,0,0.08);
+    text-align:center;
+}
+.sos-icon{font-size:42px;margin-bottom:12px;}
+.sos-card h3{font-size:20px;margin-bottom:10px;}
+.location-box{
+    margin:18px 0;padding:16px;border-radius:18px;background:rgba(0,0,0,0.03);
+    text-align:left;
+}
+.sos-actions{display:flex;gap:12px;margin-top:14px;}
+.cancel-btn{
+    flex:1;border:2px solid #ddd;background:#fff;color:#333;
+    border-radius:14px;padding:14px 18px;cursor:pointer;
+    font-size:15px;font-weight:700;-webkit-tap-highlight-color:transparent;transition:.2s;
+}
+.cancel-btn:active{background:#f5f5f5;}
+.sos-actions .login-btn{flex:1;margin-top:0;}
+.hotline-list{display:grid;gap:12px;}
+.hotline-item{
+    padding:16px;display:flex;justify-content:space-between;align-items:center;
+    border-radius:18px;background:rgba(255,255,255,0.92);
+    box-shadow:0 6px 18px rgba(0,0,0,0.07);
+}
+.small-btn{
+    border:none;background:#18e0c0;color:#fff;border-radius:12px;
+    padding:10px 16px;cursor:pointer;font-weight:800;font-size:13px;
+    -webkit-tap-highlight-color:transparent;transition:.2s;
+}
+.small-btn:active{transform:scale(0.95);}
+
+/* REPORT */
+.report-form{
+    padding:22px;margin-bottom:18px;border-radius:24px;
+    background:rgba(255,255,255,0.92);box-shadow:0 12px 28px rgba(0,0,0,0.08);
+}
+.report-form label{display:block;margin-bottom:8px;font-weight:700;}
+.report-form .form-input{margin-bottom:18px;}
+.upload-btn{
+    width:100%;border:2px dashed #18e0c0;background:rgba(24,224,192,0.08);
+    color:#0d3f2a;padding:16px;border-radius:18px;cursor:pointer;margin-bottom:18px;
+    font-weight:700;-webkit-tap-highlight-color:transparent;transition:.2s;
+}
+.upload-btn:active{background:rgba(24,224,192,0.15);}
+
+/* PREPAREDNESS */
+.checklist-card{
+    padding:22px;margin-bottom:18px;border-radius:24px;
+    background:rgba(255,255,255,0.92);box-shadow:0 12px 28px rgba(0,0,0,0.08);
+}
+.checklist-card h3{font-size:18px;margin-bottom:16px;}
+.checklist-card label{
+    display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:15px;cursor:pointer;
+}
+.checklist-card input{width:18px;height:18px;cursor:pointer;}
+.guide-card{
+    display:block;width:100%;text-align:left;border:none;
+    background:rgba(255,255,255,0.96);padding:18px;margin-bottom:12px;
+    cursor:pointer;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,0.07);
+    -webkit-tap-highlight-color:transparent;transition:.2s;
+}
+.guide-card strong{display:block;margin-bottom:6px;font-size:15px;}
+.guide-card small{color:#777;}
+.guide-card:active{transform:scale(0.98);}
+
+.hidden{display:none!important;}
+  </style>
 </head>
-
 <body>
 
 <!-- SPLASH SCREEN -->
-
-<div id="page-splash"
-     class="page active">
-
-    <div class="wave-top"></div>
-
-    <div class="splash-content">
-
-        <h1 class="logo-title">
-            Davao<br>Safe
-        </h1>
-
-    </div>
-
+<div id="page-splash" class="page active">
+  <div class="wave-top"></div>
+  <div class="splash-layout">
+    <div></div>
+    <h1 class="logo-title">Davao<br>Safe</h1>
     <div class="splash-footer">
-
-        <button id="getStartedBtn"
-                class="start-btn">
-
-            Get Started
-
-        </button>
-
-        <div class="life-text">
-            LIFE IS HERE
-        </div>
-
+      <button id="getStartedBtn" class="start-btn">Get Started</button>
+      <div class="life-text">LIFE IS HERE</div>
     </div>
-
-    <div class="wave-bottom"></div>
-
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
 <!-- LOGIN PAGE -->
-
-<div id="page-login"
-     class="page">
-
-    <div class="wave-top"></div>
-
-    <div class="auth-container">
-
-        <div class="status-bar">
-            <span>10:00</span>
-            <span>🔋</span>
-        </div>
-
-        <h2 class="auth-title">
-            Login
-        </h2>
-
-        <div class="form-group">
-
-            <label>Email</label>
-
-            <input type="email"
-                   class="form-input"
-                   placeholder="Enter your email">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Password</label>
-
-            <div class="password-box">
-
-                <input type="password"
-                       class="form-input"
-                       placeholder="Enter your password">
-
-                <span class="eye-icon">
-                    👁
-                </span>
-
-            </div>
-
-            <span class="forgot-link"
-                  onclick="showPage('page-change-password')">
-
-                forgot password?
-
-            </span>
-
-        </div>
-
-        <button class="login-btn"
-                onclick="showPage('page-home')">
-
-            Login
-
-        </button>
-
-        <p class="bottom-text">
-
-            Don’t have an account yet?
-
-            <span onclick="showPage('page-signup')">
-
-                Sign up
-
-            </span>
-
-        </p>
-
-        <div class="divider">
-
-            <span></span>
-
-            or login with
-
-            <span></span>
-
-        </div>
-
-        <div class="google-login">
-
-            <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png">
-
-        </div>
-
+<div id="page-login" class="page">
+  <div class="wave-top"></div>
+  <div class="auth-container">
+    <div class="status-bar">
+      <span id="loginTime">10:00</span><span>🔋</span>
     </div>
-
-    <div class="wave-bottom"></div>
-
+    <h2 class="auth-title">Login</h2>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" class="form-input" placeholder="Enter your email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="password-box">
+        <input type="password" class="form-input" placeholder="Enter your password">
+        <span class="eye-icon">👁</span>
+      </div>
+      <span class="forgot-link" onclick="showPage('page-change-password')">forgot password?</span>
+    </div>
+    <button class="login-btn" onclick="showPage('page-home')">Login</button>
+    <p class="bottom-text">Don't have an account yet? <span onclick="showPage('page-signup')">Sign up</span></p>
+    <div class="divider"><span></span>or login with<span></span></div>
+    <div class="google-login">
+      <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png">
+    </div>
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
 <!-- SIGNUP PAGE -->
-
-<div id="page-signup"
-     class="page">
-
-    <div class="wave-top"></div>
-
-    <div class="auth-container">
-
-        <div class="status-bar">
-            <span>10:00</span>
-            <span>🔋</span>
-        </div>
-
-        <h2 class="auth-title">
-            Sign up
-        </h2>
-
-        <div class="form-group">
-
-            <label>Name</label>
-
-            <input type="text"
-                   class="form-input"
-                   placeholder="Enter your name">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Email</label>
-
-            <input type="email"
-                   class="form-input"
-                   placeholder="Enter your email">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Create password</label>
-
-            <div class="password-box">
-
-                <input type="password"
-                       class="form-input"
-                       placeholder="Enter your password">
-
-                <span class="eye-icon">
-                    👁
-                </span>
-
-            </div>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Confirm password</label>
-
-            <div class="password-box">
-
-                <input type="password"
-                       class="form-input"
-                       placeholder="Confirm password">
-
-                <span class="eye-icon">
-                    👁
-                </span>
-
-            </div>
-
-        </div>
-
-        <button class="login-btn"
-                onclick="showPage('page-home')">
-
-            Sign up
-
-        </button>
-
-        <p class="bottom-text">
-
-            Already have an account?
-
-            <span onclick="showPage('page-login')">
-
-                Login
-
-            </span>
-
-        </p>
-
+<div id="page-signup" class="page">
+  <div class="wave-top"></div>
+  <div class="auth-container">
+    <div class="status-bar">
+      <span id="signupTime">10:00</span><span>🔋</span>
     </div>
-
-    <div class="wave-bottom"></div>
-
+    <h2 class="auth-title">Sign up</h2>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-input" placeholder="Enter your name">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" class="form-input" placeholder="Enter your email">
+    </div>
+    <div class="form-group">
+      <label>Create password</label>
+      <div class="password-box">
+        <input type="password" class="form-input" placeholder="Enter your password">
+        <span class="eye-icon">👁</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Confirm password</label>
+      <div class="password-box">
+        <input type="password" class="form-input" placeholder="Confirm password">
+        <span class="eye-icon">👁</span>
+      </div>
+    </div>
+    <button class="login-btn" onclick="showPage('page-home')">Sign up</button>
+    <p class="bottom-text">Already have an account? <span onclick="showPage('page-login')">Login</span></p>
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
 <!-- CHANGE PASSWORD PAGE -->
-
-<div id="page-change-password"
-     class="page">
-
-    <div class="wave-top"></div>
-
-    <div class="auth-container">
-
-        <div class="status-bar">
-            <span>10:00</span>
-            <span>🔋</span>
-        </div>
-
-        <button type="button"
-                class="back-btn"
-                onclick="showPage('page-login')">
-
-            ← Back
-
-        </button>
-
-        <h2 class="auth-title">
-            Change<br>password
-        </h2>
-
-        <div class="form-group">
-
-            <label>Name</label>
-
-            <input type="text"
-                   class="form-input"
-                   placeholder="Enter your name">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Email</label>
-
-            <input type="email"
-                   class="form-input"
-                   placeholder="Enter your email">
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Change password</label>
-
-            <div class="password-box">
-
-                <input type="password"
-                       id="newPassword"
-                       class="form-input"
-                       placeholder="Enter new password">
-
-                <span class="eye-icon">
-                    👁
-                </span>
-
-            </div>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Confirm password</label>
-
-            <div class="password-box">
-
-                <input type="password"
-                       id="confirmPassword"
-                       class="form-input"
-                       placeholder="Confirm password">
-
-                <span class="eye-icon">
-                    👁
-                </span>
-
-            </div>
-
-        </div>
-
-        <button type="button"
-                class="login-btn"
-                onclick="changePassword()">
-
-            Change
-
-        </button>
-
+<div id="page-change-password" class="page">
+  <div class="wave-top"></div>
+  <div class="auth-container">
+    <div class="status-bar">
+      <span id="changeTime">10:00</span><span>🔋</span>
     </div>
-
-    <div class="wave-bottom"></div>
-
+    <button type="button" class="back-btn" onclick="showPage('page-login')">← Back</button>
+    <h2 class="auth-title">Change<br>password</h2>
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" class="form-input" placeholder="Enter your name">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" class="form-input" placeholder="Enter your email">
+    </div>
+    <div class="form-group">
+      <label>Change password</label>
+      <div class="password-box">
+        <input type="password" id="newPassword" class="form-input" placeholder="Enter new password">
+        <span class="eye-icon">👁</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Confirm password</label>
+      <div class="password-box">
+        <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm password">
+        <span class="eye-icon">👁</span>
+      </div>
+    </div>
+    <button type="button" class="login-btn" onclick="changePassword()">Change</button>
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
 <!-- HOME PAGE -->
-
-<div id="page-home"
-     class="page">
-
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="app-header">
-
-            <div class="app-title">Davao Safe</div>
-
-            <div class="app-meta">10:00</div>
-
-        </div>
-
-        <div class="search-panel">
-
-            <div class="search-box">
-
-                <span>🔍</span>
-                <input id="searchInput"
-                       type="search"
-                       placeholder="Search"
-                       oninput="updateSearchResults()">
-
-            </div>
-
-            <div class="search-filters">
-
-                <button class="chip active"
-                        onclick="setSearchFilter('All')">All</button>
-                <button class="chip"
-                        onclick="setSearchFilter('Alerts')">Alerts</button>
-                <button class="chip"
-                        onclick="setSearchFilter('Shelters')">Shelters</button>
-                <button class="chip"
-                        onclick="setSearchFilter('Articles')">Articles</button>
-
-            </div>
-
-        </div>
-
-        <div id="searchResults"
-             class="search-results hidden">
-
-            <div class="result-item">
-                <div class="result-title">Flood alert - Barangay 5</div>
-                <div class="result-subtitle">Flood advisory reported 12 mins ago</div>
-            </div>
-
-            <div class="result-item">
-                <div class="result-title">What to do during floods</div>
-                <div class="result-subtitle">Article · Preparedness guide</div>
-            </div>
-
-            <div class="result-item">
-                <div class="result-title">Calinan evacuation center</div>
-                <div class="result-subtitle">Shelter · 2 km away</div>
-            </div>
-
-        </div>
-
-        <div class="status-card safe">
-
-            <div>
-                <span class="status-pill">SAFE</span>
-                <p>No active threats detected</p>
-            </div>
-
-            <div class="weather-info">
-                <span>32°C</span>
-                <small>Partly cloudy</small>
-            </div>
-
-        </div>
-
-        <div class="home-grid">
-
-            <button class="action-card red"
-                    onclick="showPage('page-emergency')">
-
-                <div class="action-title">Emergency SOS</div>
-                <div class="action-caption">Send help immediately</div>
-
-            </button>
-
-            <button class="action-card blue"
-                    onclick="showPage('page-report')">
-
-                <div class="action-title">Report Incident</div>
-                <div class="action-caption">Tell us what happened</div>
-
-            </button>
-
-            <button class="action-card yellow"
-                    onclick="showPage('page-preparedness')">
-
-                <div class="action-title">Preparedness</div>
-                <div class="action-caption">Ready your family</div>
-
-            </button>
-
-            <button class="action-card teal"
-                    onclick="showPage('page-map')">
-
-                <div class="action-title">Flood Map</div>
-                <div class="action-caption">View affected areas</div>
-
-            </button>
-
-        </div>
-
-        <div class="recent-section">
-
-            <div class="recent-header">
-                <h3>Recent incidents</h3>
-                <button class="text-link"
-                        onclick="showPage('page-alerts')">View all</button>
-            </div>
-
-            <div class="recent-item-card">
-                <div>
-                    <strong>Rain flood in Buhangin</strong>
-                    <p>6 min ago · Davao City</p>
-                </div>
-            </div>
-
-            <div class="recent-item-card">
-                <div>
-                    <strong>Fire incident in Davao City</strong>
-                    <p>18 min ago · District 2</p>
-                </div>
-            </div>
-
-        </div>
-
+<div id="page-home" class="page">
+  <div class="wave-top"></div>
+  <div class="app-shell">
+    <div class="app-header">
+      <div class="app-title">Davao Safe</div>
+      <div id="homeTime" class="app-meta">10:00</div>
     </div>
-
-    <div class="bottom-nav">
-
-        <button class="nav-item active"
-                onclick="showPage('page-home')">
-            Home
-        </button>
-
-        <button class="nav-item"
-                onclick="showPage('page-map')">
-            Map
-        </button>
-
-        <button class="nav-item"
-                onclick="showPage('page-alerts')">
-            Alerts
-        </button>
-
-        <button class="nav-item"
-                onclick="showPage('page-profile')">
-            Profile
-        </button>
-
+    <div class="search-panel">
+      <div class="search-box">
+        <span>🔍</span>
+        <input id="searchInput" type="search" placeholder="Search" oninput="updateSearchResults()">
+      </div>
+      <div class="search-filters">
+        <button class="chip active" onclick="setSearchFilter('All')">All</button>
+        <button class="chip" onclick="setSearchFilter('Alerts')">Alerts</button>
+        <button class="chip" onclick="setSearchFilter('Shelters')">Shelters</button>
+        <button class="chip" onclick="setSearchFilter('Articles')">Articles</button>
+      </div>
     </div>
-
+    <div id="searchResults" class="search-results hidden">
+      <div class="result-item">
+        <div class="result-title">Flood alert - Barangay 5</div>
+        <div class="result-subtitle">Flood advisory reported 12 mins ago</div>
+      </div>
+      <div class="result-item">
+        <div class="result-title">What to do during floods</div>
+        <div class="result-subtitle">Article · Preparedness guide</div>
+      </div>
+      <div class="result-item">
+        <div class="result-title">Calinan evacuation center</div>
+        <div class="result-subtitle">Shelter · 2 km away</div>
+      </div>
+    </div>
+    <div class="status-card safe">
+      <div>
+        <span class="status-pill">SAFE</span>
+        <p>No active threats detected</p>
+      </div>
+      <div class="weather-info">
+        <span id="temperatureValue">--°C</span>
+        <small id="weatherSummary">Loading Davao weather...</small>
+      </div>
+    </div>
+    <div class="home-grid">
+      <button class="action-card red" onclick="showPage('page-emergency')">
+        <div class="action-title">Emergency SOS</div>
+        <div class="action-caption">Send help immediately</div>
+      </button>
+      <button class="action-card blue" onclick="showPage('page-report')">
+        <div class="action-title">Report Incident</div>
+        <div class="action-caption">Tell us what happened</div>
+      </button>
+      <button class="action-card yellow" onclick="showPage('page-preparedness')">
+        <div class="action-title">Preparedness</div>
+        <div class="action-caption">Ready your family</div>
+      </button>
+      <button class="action-card teal" onclick="showPage('page-map')">
+        <div class="action-title">Flood Map</div>
+        <div class="action-caption">View affected areas</div>
+      </button>
+    </div>
+    <div class="recent-section">
+      <div class="recent-header">
+        <h3>Recent incidents</h3>
+        <button class="text-link" onclick="showPage('page-alerts')">View all</button>
+      </div>
+      <div class="recent-item-card">
+        <div>
+          <strong>Rain flood in Buhangin</strong>
+          <p>6 min ago · Davao City</p>
+        </div>
+      </div>
+      <div class="recent-item-card">
+        <div>
+          <strong>Fire incident in Davao City</strong>
+          <p>18 min ago · District 2</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="showPage('page-home')">🏠 Home</button>
+    <button class="nav-item" onclick="showPage('page-map')">🗺 Map</button>
+    <button class="nav-item" onclick="showPage('page-alerts')">🔔 Alerts</button>
+    <button class="nav-item" onclick="showPage('page-profile')">👤 Profile</button>
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
-<!-- MAP PAGE -->
+<!-- MAP PAGE (redesigned) -->
+<div id="page-map" class="page">
+  <!-- Sticky header -->
+  <div class="map-page-header">
+    <button class="map-menu-btn" onclick="showPage('page-home')">☰</button>
+    <h2>Flood map</h2>
+    <div style="width:40px"></div>
+  </div>
 
-<div id="page-map"
-     class="page">
+  <!-- Scrollable content (no app-shell wrapper — custom layout) -->
+  <div style="flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;">
 
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="page-header">
-            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
-            <h2>Flood Map</h2>
-        </div>
-
-        <div class="map-card">
-            <p>Interactive map placeholder for flood zones and evacuation routes.</p>
-        </div>
-
-        <div class="map-list">
-            <div class="map-list-item">
-                <strong>Lowland advisory</strong>
-                <p>Heavy rain expected in lowland areas</p>
-            </div>
-            <div class="map-list-item">
-                <strong>River rise alert</strong>
-                <p>River levels increasing near Talomo</p>
-            </div>
-        </div>
-
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-item"><div class="legend-dot high"></div> High risk</div>
+      <div class="legend-item"><div class="legend-dot medium"></div> Medium</div>
+      <div class="legend-item"><div class="legend-dot low"></div> Low risk</div>
+      <div class="legend-item"><div class="legend-dot evac"></div> Evacuation</div>
     </div>
 
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('page-home')">Home</button>
-        <button class="nav-item active" onclick="showPage('page-map')">Map</button>
-        <button class="nav-item" onclick="showPage('page-alerts')">Alerts</button>
-        <button class="nav-item" onclick="showPage('page-profile')">Profile</button>
+    <!-- Visual map area -->
+    <div id="map" style="height: 400px; width: 100%; border-radius: 24px;"></div>
+
+    <!-- District Info Card -->
+    <div class="district-info-card">
+      <h3 id="districtName">Buhangin district</h3>
+      <div class="info-row">
+        <span class="info-label">Risk level</span>
+        <span class="risk-badge high" id="districtRisk">High</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Water level</span>
+        <span class="info-value water-rising" id="districtWater">1.8m — rising</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Nearest shelter</span>
+        <span class="info-value" id="districtShelter">Buhangin National HS</span>
+      </div>
+      <button class="directions-btn" onclick="getDirections(7.1907, 125.4553)">
+        Get directions to shelter →
+      </button>
     </div>
 
+    <!-- Evacuation centers -->
+    <div class="evac-section">
+      <h3>Evacuation centers</h3>
+      <div class="evac-item">
+        <div class="evac-left">
+          <div class="evac-dot"></div>
+          <span class="evac-name">Buhangin National HS</span>
+        </div>
+        <span class="evac-dist">0.8 km</span>
+        <button class="evac-nav-btn" onclick="getDirections(7.1907, 125.4553)">Go</button>
+      </div>
+      <div class="evac-item">
+        <div class="evac-left">
+          <div class="evac-dot"></div>
+          <span class="evac-name">Davao City Gymnasium</span>
+        </div>
+        <span class="evac-dist">2.4 km</span>
+        <button class="evac-nav-btn" onclick="getDirections(7.0707, 125.6111)">Go</button>
+      </div>
+      <div class="evac-item">
+        <div class="evac-left">
+          <div class="evac-dot"></div>
+          <span class="evac-name">Calinan Covered Court</span>
+        </div>
+        <span class="evac-dist">5.1 km</span>
+        <button class="evac-nav-btn" onclick="getDirections(7.1307, 125.4553)">Go</button>
+      </div>
+      <div class="evac-item">
+        <div class="evac-left">
+          <div class="evac-dot"></div>
+          <span class="evac-name">Toril Elementary School</span>
+        </div>
+        <span class="evac-dist">6.7 km</span>
+        <button class="evac-nav-btn" onclick="getDirections(7.0207, 125.4553)">Go</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="showPage('page-home')">🏠 Home</button>
+    <button class="nav-item active" onclick="showPage('page-map')">🗺 Map</button>
+    <button class="nav-item" onclick="showPage('page-alerts')">🔔 Alerts</button>
+    <button class="nav-item" onclick="showPage('page-profile')">👤 Profile</button>
+  </div>
 </div>
 
 <!-- ALERTS PAGE -->
-
-<div id="page-alerts"
-     class="page">
-
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="page-header">
-            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
-            <h2>Alerts</h2>
-        </div>
-
-        <div class="alert-card warning">
-            <span class="status-pill">Warning</span>
-            <p>Heavy rain advisory in lowland areas</p>
-            <button class="view-alert-btn" onclick="showAlertDetail('warning')">View advisory</button>
-        </div>
-
-        <div class="alert-card danger">
-            <span class="status-pill">Danger</span>
-            <p>Flood watch near Talomo River</p>
-            <button class="view-alert-btn" onclick="showAlertDetail('danger')">View advisory</button>
-        </div>
-
-        <div id="alertDetail" class="alert-detail hidden">
-            <div class="alert-detail-header">
-                <h3 id="alertDetailTitle">Advisory title</h3>
-                <button class="small-btn" onclick="closeAlertDetail()">Close</button>
-            </div>
-            <p id="alertDetailText">Full advisory details appear here when an alert is selected.</p>
-            <div class="alert-detail-meta">
-                <strong>Updated:</strong> 10 mins ago
-            </div>
-        </div>
-
+<div id="page-alerts" class="page">
+  <div class="wave-top"></div>
+  <div class="app-shell">
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+      <h2>Alerts</h2>
     </div>
-
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('page-home')">Home</button>
-        <button class="nav-item" onclick="showPage('page-map')">Map</button>
-        <button class="nav-item active" onclick="showPage('page-alerts')">Alerts</button>
-        <button class="nav-item" onclick="showPage('page-profile')">Profile</button>
+    <div class="alert-card warning">
+      <span class="status-pill" style="background:#e8a442;">⚠️ Warning</span>
+      <p>Heavy rain advisory in lowland areas</p>
+      <button class="view-alert-btn" onclick="showAlertDetail('warning')">View advisory</button>
     </div>
-
+    <div class="alert-card danger">
+      <span class="status-pill" style="background:#e05c4a;">🚨 Danger</span>
+      <p>Flood watch near Talomo River</p>
+      <button class="view-alert-btn" onclick="showAlertDetail('danger')">View advisory</button>
+    </div>
+    <div id="alertDetail" class="alert-detail hidden">
+      <div class="alert-detail-header">
+        <h3 id="alertDetailTitle">Advisory title</h3>
+        <button class="small-btn" onclick="closeAlertDetail()">Close</button>
+      </div>
+      <p id="alertDetailText">Full advisory details appear here when an alert is selected.</p>
+      <div class="alert-detail-meta"><strong>Updated:</strong> 10 mins ago</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="showPage('page-home')">🏠 Home</button>
+    <button class="nav-item" onclick="showPage('page-map')">🗺 Map</button>
+    <button class="nav-item active" onclick="showPage('page-alerts')">🔔 Alerts</button>
+    <button class="nav-item" onclick="showPage('page-profile')">👤 Profile</button>
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
 <!-- PROFILE PAGE -->
-
-<div id="page-profile"
-     class="page">
-
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="page-header">
-            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
-            <h2>Profile</h2>
-        </div>
-
-        <div class="profile-card">
-            <h3>Jane Doe</h3>
-            <p>Location: Davao City</p>
-            <p>Status: Safe</p>
-        </div>
-
-        <div class="profile-actions">
-            <button class="login-btn" onclick="alert('Profile settings not available yet.')">Account settings</button>
-            <button class="login-btn" onclick="alert('Help center is coming soon.')">Help center</button>
-        </div>
-
+<div id="page-profile" class="page">
+  <div class="wave-top"></div>
+  <div class="app-shell">
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+      <h2>Profile</h2>
     </div>
-
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('page-home')">Home</button>
-        <button class="nav-item" onclick="showPage('page-map')">Map</button>
-        <button class="nav-item" onclick="showPage('page-alerts')">Alerts</button>
-        <button class="nav-item active" onclick="showPage('page-profile')">Profile</button>
+    <div class="profile-card">
+      <h3>Jane Doe</h3>
+      <p>📍 Davao City</p>
+      <p>✅ Status: Safe</p>
     </div>
-
+    <div class="profile-actions">
+      <button class="login-btn" onclick="alert('Profile settings not available yet.')">Account settings</button>
+      <button class="login-btn" style="background:linear-gradient(90deg,#4d7cff,#6a8fff);" onclick="alert('Help center is coming soon.')">Help center</button>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="showPage('page-home')">🏠 Home</button>
+    <button class="nav-item" onclick="showPage('page-map')">🗺 Map</button>
+    <button class="nav-item" onclick="showPage('page-alerts')">🔔 Alerts</button>
+    <button class="nav-item active" onclick="showPage('page-profile')">👤 Profile</button>
+  </div>
+  <div class="wave-bottom"></div>
 </div>
 
 <!-- EMERGENCY PAGE -->
-
-<div id="page-emergency"
-     class="page">
-
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="page-header">
-            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
-            <h2>Emergency SOS</h2>
-        </div>
-
-        <div class="sos-card">
-            <div class="sos-icon">🚨</div>
-            <h3>Send emergency SOS?</h3>
-            <p>Your GPS location and profile will be sent to DDRMO and local responders immediately.</p>
-            <div class="location-box">
-                <p><strong>Your location</strong></p>
-                <p>Buhangin, Davao City</p>
-            </div>
-            <div class="sos-actions">
-                <button class="cancel-btn" onclick="cancelSOS()">Cancel</button>
-                <button class="login-btn" onclick="sendSOS()">Send SOS</button>
-            </div>
-        </div>
-
-        <div class="hotline-list">
-            <div class="hotline-item">
-                <strong>CDRRMO Davao</strong>
-                <button class="small-btn" onclick="alert('Calling CDRRMO Davao...')">Call</button>
-            </div>
-            <div class="hotline-item">
-                <strong>PNP-166</strong>
-                <button class="small-btn" onclick="alert('Calling Philippine National Police...')">Call</button>
-            </div>
-        </div>
-
+<div id="page-emergency" class="page">
+  <div class="wave-top"></div>
+  <div class="app-shell">
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+      <h2>Emergency SOS</h2>
     </div>
-
+    <div class="sos-card">
+      <div class="sos-icon">🚨</div>
+      <h3>Send emergency SOS?</h3>
+      <p>Your GPS location and profile will be sent to DDRMO and local responders immediately.</p>
+      <div class="location-box">
+        <p><strong>Your location</strong></p>
+        <p>Buhangin, Davao City</p>
+      </div>
+      <div class="sos-actions">
+        <button class="cancel-btn" onclick="cancelSOS()">Cancel</button>
+        <button class="login-btn" onclick="sendSOS()">Send SOS</button>
+      </div>
+    </div>
+    <div class="hotline-list">
+      <div class="hotline-item">
+        <strong>CDRRMO Davao</strong>
+        <button class="small-btn" onclick="alert('Calling CDRRMO Davao...')">📞 Call</button>
+      </div>
+      <div class="hotline-item">
+        <strong>PNP-166</strong>
+        <button class="small-btn" onclick="alert('Calling Philippine National Police...')">📞 Call</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- REPORT PAGE -->
-
-<div id="page-report"
-     class="page">
-
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="page-header">
-            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
-            <h2>Report an Incident</h2>
-        </div>
-
-        <div class="report-form">
-
-            <label>Incident type</label>
-            <input id="incidentType" class="form-input" placeholder="Enter incident type">
-
-            <label>Description</label>
-            <textarea id="incidentDescription" class="form-input" rows="4" placeholder="Describe what happened"></textarea>
-
-            <label>Photo / Video</label>
-            <button class="upload-btn" onclick="alert('Upload not available in prototype.')">Tap to upload photo or video</button>
-
-            <label>Your location</label>
-            <input id="incidentLocation" class="form-input" value="Buhangin, Davao City">
-
-            <button class="login-btn" onclick="submitIncident()">Submit report</button>
-
-        </div>
-
+<div id="page-report" class="page">
+  <div class="wave-top"></div>
+  <div class="app-shell">
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+      <h2>Report an Incident</h2>
     </div>
-
+    <div class="report-form">
+      <label>Incident type</label>
+      <input id="incidentType" class="form-input" placeholder="Enter incident type">
+      <label>Description</label>
+      <textarea id="incidentDescription" class="form-input" rows="4" placeholder="Describe what happened"></textarea>
+      <label>Photo / Video</label>
+      <button class="upload-btn" onclick="alert('Upload not available in prototype.')">📷 Tap to upload photo or video</button>
+      <label>Your location</label>
+      <input id="incidentLocation" class="form-input" value="Buhangin, Davao City">
+      <button class="login-btn" onclick="submitIncident()">Submit report</button>
+    </div>
+  </div>
 </div>
 
 <!-- PREPAREDNESS PAGE -->
-
-<div id="page-preparedness"
-     class="page">
-
-    <div class="wave-top"></div>
-    <div class="wave-bottom"></div>
-
-    <div class="app-shell">
-
-        <div class="page-header">
-            <button class="back-btn" onclick="showPage('page-home')">← Home</button>
-            <h2>Preparedness</h2>
-        </div>
-
-        <div class="checklist-card">
-            <h3>Go-bag checklist</h3>
-            <label><input type="checkbox"> Water (3-day supply)</label>
-            <label><input type="checkbox"> First aid kit</label>
-            <label><input type="checkbox"> Emergency documents</label>
-            <label><input type="checkbox"> Flashlight & batteries</label>
-            <label><input type="checkbox"> Food supply</label>
-        </div>
-
-        <div class="video-guides">
-            <button class="guide-card" onclick="alert('Opening preparedness guide...')">
-                <strong>What to do during floods</strong>
-                <small>4:32 · CDRRMO</small>
-            </button>
-            <button class="guide-card" onclick="alert('Opening family emergency plan guide...')">
-                <strong>Building your family emergency plan</strong>
-                <small>6:07 · NDRRMC</small>
-            </button>
-        </div>
-
+<div id="page-preparedness" class="page">
+  <div class="wave-top"></div>
+  <div class="app-shell">
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('page-home')">← Home</button>
+      <h2>Preparedness</h2>
     </div>
-
+    <div class="checklist-card">
+      <h3>Go-bag checklist</h3>
+      <label><input type="checkbox"> Water (3-day supply)</label>
+      <label><input type="checkbox"> First aid kit</label>
+      <label><input type="checkbox"> Emergency documents</label>
+      <label><input type="checkbox"> Flashlight & batteries</label>
+      <label><input type="checkbox"> Food supply</label>
+    </div>
+    <div class="video-guides">
+      <button class="guide-card" onclick="alert('Opening preparedness guide...')">
+        <strong>What to do during floods</strong>
+        <small>4:32 · CDRRMO</small>
+      </button>
+      <button class="guide-card" onclick="alert('Opening family emergency plan guide...')">
+        <strong>Building your family emergency plan</strong>
+        <small>6:07 · NDRRMC</small>
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>
-
 window.onload = function(){
 
-    /* PAGE NAVIGATION */
-    function showPage(pageId){
-        const pages = document.querySelectorAll('.page');
-        pages.forEach(page => page.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        updateNav(pageId);
+  /* DISTRICT DATA */
+  const districtData = {
+    buhangin: {
+      name: 'Buhangin district',
+      risk: 'High',
+      riskClass: 'high',
+      water: '1.8m — rising',
+      waterClass: 'water-rising',
+      shelter: 'Buhangin National HS'
+    },
+    matina: {
+      name: 'Matina district',
+      risk: 'Medium',
+      riskClass: 'medium',
+      water: '0.9m — stable',
+      waterClass: '',
+      shelter: 'Matina Elementary School'
+    },
+    toril: {
+      name: 'Toril district',
+      risk: 'Low',
+      riskClass: 'low',
+      water: '0.3m — stable',
+      waterClass: '',
+      shelter: 'Toril Elementary School'
+    },
+    calinan: {
+      name: 'Calinan district',
+      risk: 'Evacuation',
+      riskClass: 'evac',
+      water: '—',
+      waterClass: '',
+      shelter: 'Calinan Covered Court'
     }
+  };
 
-    function updateNav(pageId){
-        const navButtons = document.querySelectorAll('.bottom-nav .nav-item');
-        navButtons.forEach(button => {
-            button.classList.toggle('active', button.getAttribute('onclick').includes(pageId));
-        });
+  window.selectDistrict = function(id){
+    const d = districtData[id];
+    if(!d) return;
+    document.getElementById('districtName').textContent = d.name;
+    const riskBadge = document.getElementById('districtRisk');
+    riskBadge.textContent = d.risk;
+    riskBadge.className = 'risk-badge ' + d.riskClass;
+    const waterEl = document.getElementById('districtWater');
+    waterEl.textContent = d.water;
+    waterEl.className = 'info-value ' + d.waterClass;
+    document.getElementById('districtShelter').textContent = d.shelter;
+    // highlight selected pin
+    document.querySelectorAll('.map-district-pin .district-box').forEach(el=>{
+      el.style.outline = 'none';
+    });
+    const pin = document.getElementById('pin-'+id);
+    if(pin) pin.querySelector('.district-box').style.outline = '3px solid #fff';
+  };
+
+  /* PAGE NAVIGATION */
+  function showPage(pageId){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    updateNav(pageId);
+
+    if(pageId === 'page-map'){
+      initMap();
     }
+  }
 
-    window.showPage = showPage;
+  function updateNav(pageId){
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
+      btn.classList.toggle('active', (btn.getAttribute('onclick')||'').includes(pageId));
+    });
+  }
 
-    window.changePassword = function() {
-        const newPass = document.getElementById('newPassword').value;
-        const confirmPass = document.getElementById('confirmPassword').value;
-        if (newPass === confirmPass && newPass.trim() !== '') {
-            showPage('page-login');
-        } else {
-            alert('Passwords do not match or are empty.');
-        }
+  window.showPage = showPage;
+
+  window.changePassword = function(){
+    const newPass = document.getElementById('newPassword').value;
+    const confirmPass = document.getElementById('confirmPassword').value;
+    if(newPass === confirmPass && newPass.trim() !== ''){
+      showPage('page-login');
+    } else {
+      alert('Passwords do not match or are empty.');
+    }
+  };
+
+  window.sendSOS = function(){
+    alert('Emergency SOS sent. Help is on the way.');
+    showPage('page-home');
+  };
+
+  window.cancelSOS = function(){ showPage('page-home'); };
+
+  window.submitIncident = function(){
+    const t = document.getElementById('incidentType').value.trim();
+    const l = document.getElementById('incidentLocation').value.trim();
+    if(!t){ alert('Please enter the incident type.'); return; }
+    if(!l){ alert('Please enter your location.'); return; }
+    alert('Incident reported successfully.');
+    showPage('page-home');
+  };
+
+  window.showAlertDetail = function(type){
+    const details = {
+      warning:{ title:'Heavy Rain Advisory', text:'A heavy rain advisory is active in lowland areas. Residents should avoid flooded roads, monitor local weather updates, and move to higher ground if necessary.', updated:'8 mins ago' },
+      danger:{ title:'Flood Watch Near Talomo River', text:'A flood watch is in effect near Talomo River. Stay alert for rising water levels, secure belongings, and follow instructions from local authorities.', updated:'5 mins ago' }
     };
+    const d = details[type] || details.warning;
+    document.getElementById('alertDetailTitle').textContent = d.title;
+    document.getElementById('alertDetailText').textContent = d.text;
+    document.querySelector('#alertDetail .alert-detail-meta').innerHTML = `<strong>Updated:</strong> ${d.updated}`;
+    document.getElementById('alertDetail').classList.remove('hidden');
+  };
 
-    window.sendSOS = function(){
-        alert('Emergency SOS sent. Help is on the way.');
-        showPage('page-home');
-    };
+  window.closeAlertDetail = function(){
+    document.getElementById('alertDetail').classList.add('hidden');
+  };
 
-    window.cancelSOS = function(){
-        showPage('page-home');
-    };
+  window.updateSearchResults = function(){
+    const q = document.getElementById('searchInput').value.trim();
+    document.getElementById('searchResults').classList.toggle('hidden', q.length === 0);
+  };
 
-    window.submitIncident = function(){
-        const incidentType = document.getElementById('incidentType').value.trim();
-        const incidentLocation = document.getElementById('incidentLocation').value.trim();
-        if(!incidentType){
-            alert('Please enter the incident type.');
-            return;
-        }
-        if(!incidentLocation){
-            alert('Please enter your location.');
-            return;
-        }
-        alert('Incident reported successfully.');
-        showPage('page-home');
-    };
+  window.setSearchFilter = function(filter){
+    document.querySelectorAll('.search-filters .chip').forEach(chip => {
+      chip.classList.toggle('active', chip.textContent === filter);
+    });
+    document.getElementById('searchInput').placeholder = `Search ${filter}`;
+    updateSearchResults();
+  };
 
-    window.showAlertDetail = function(type){
-        const details = {
-            warning: {
-                title: 'Heavy Rain Advisory',
-                text: 'A heavy rain advisory is active in lowland areas. Residents should avoid flooded roads, monitor local weather updates, and move to higher ground if necessary.',
-                updated: '8 mins ago'
-            },
-            danger: {
-                title: 'Flood Watch Near Talomo River',
-                text: 'A flood watch is in effect near Talomo River. Stay alert for rising water levels, secure belongings, and follow instructions from local authorities.',
-                updated: '5 mins ago'
-            }
-        };
-        const detail = details[type] || details.warning;
-        document.getElementById('alertDetailTitle').textContent = detail.title;
-        document.getElementById('alertDetailText').textContent = detail.text;
-        document.querySelector('#alertDetail .alert-detail-meta').innerHTML = `<strong>Updated:</strong> ${detail.updated}`;
-        document.getElementById('alertDetail').classList.remove('hidden');
-    };
+  window.fetchWeather = function(){
+    const tempEl = document.getElementById('temperatureValue');
+    const summaryEl = document.getElementById('weatherSummary');
+    const codes = {0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',51:'Light drizzle',61:'Slight rain',63:'Moderate rain',65:'Heavy rain',80:'Rain showers',95:'Thunderstorm'};
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=7.1907&longitude=125.4553&current_weather=true&temperature_unit=celsius')
+      .then(r=>r.json())
+      .then(data=>{
+        if(data && data.current_weather){
+          tempEl.textContent = `${Math.round(data.current_weather.temperature)}°C`;
+          const code = data.current_weather.weathercode;
+          summaryEl.textContent = codes[code] ? `${codes[code]} in Davao` : 'Davao City';
+        } else { tempEl.textContent='--°C'; summaryEl.textContent='Weather unavailable'; }
+      })
+      .catch(()=>{ tempEl.textContent='--°C'; summaryEl.textContent='Unable to load weather'; });
+  };
 
-    window.closeAlertDetail = function(){
-        document.getElementById('alertDetail').classList.add('hidden');
-    };
+  window.updateTime = function(){
+    const time = new Intl.DateTimeFormat('en-US',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Manila'}).format(new Date());
+    ['homeTime','loginTime','signupTime','changeTime'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.textContent = time;
+    });
+  };
 
-    window.updateSearchResults = function(){
-        const query = document.getElementById('searchInput').value.trim();
-        const results = document.getElementById('searchResults');
-        if(query.length > 0){
-            results.classList.remove('hidden');
-        } else {
-            results.classList.add('hidden');
-        }
-    };
+  document.getElementById('getStartedBtn').addEventListener('click', ()=>showPage('page-login'));
 
-    window.setSearchFilter = function(filter){
-        document.querySelectorAll('.search-filters .chip').forEach(chip => {
-            chip.classList.toggle('active', chip.textContent === filter);
-        });
-        document.getElementById('searchInput').placeholder = `Search ${filter}`;
-        updateSearchResults();
-    };
+  window.getDirections = function(lat, lng){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(function(position){
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        const url = `https://www.google.com/maps/dir/${userLat},${userLng}/${lat},${lng}`;
+        window.open(url, '_blank');
+      }, function(){
+        alert('Location access denied. Please enable location services.');
+      });
+    } else {
+      alert('Geolocation not supported.');
+    }
+  };
 
-    const getStartedBtn = document.getElementById('getStartedBtn');
-    getStartedBtn.addEventListener('click', function(){
-        showPage('page-login');
+  function initMap(){
+    if(window.mapInstance) return; // Prevent re-init
+
+    const map = L.map('map').setView([7.1907, 125.4553], 12); // Davao City center
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add markers for evacuation centers
+    const markers = [
+      { lat: 7.1907, lng: 125.4553, title: 'Buhangin National HS', desc: 'Evacuation center' },
+      { lat: 7.0707, lng: 125.6111, title: 'Davao City Gymnasium', desc: 'Evacuation center' },
+      { lat: 7.1307, lng: 125.4553, title: 'Toril District Hall', desc: 'Evacuation center' }
+    ];
+
+    markers.forEach(m => {
+      L.marker([m.lat, m.lng]).addTo(map)
+        .bindPopup(`<b>${m.title}</b><br>${m.desc}<br><button onclick="getDirections(${m.lat}, ${m.lng})">Get Directions</button>`);
     });
 
-    const eyeIcons = document.querySelectorAll('.eye-icon');
-    eyeIcons.forEach(icon => {
-        icon.addEventListener('click', function(){
-            const input = this.parentElement.querySelector('input');
-            if(input.type === 'password'){
-                input.type = 'text';
-                this.innerHTML = '🙈';
-            } else {
-                input.type = 'password';
-                this.innerHTML = '👁';
-            }
-        });
-    });
+    window.mapInstance = map;
+  }
 
+  window.updateTime();
+  window.fetchWeather();
+  setInterval(window.updateTime, 60000);
+  setInterval(window.fetchWeather, 600000);
+
+  document.querySelectorAll('.eye-icon').forEach(icon=>{
+    icon.addEventListener('click', function(){
+      const input = this.parentElement.querySelector('input');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      this.innerHTML = input.type === 'password' ? '👁' : '🙈';
+    });
+  });
 };
-
 </script>
-
 </body>
 </html>
-```
